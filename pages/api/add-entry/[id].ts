@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { databaseId } from '../../src/config'
-import notion from '../../src/notion-client'
+import notion from '../../../src/notion-client'
 
-async function addItem(text) {
+async function addItem(text: string, databaseId: string) {
   try {
     const args = {
       parent: { database_id: databaseId },
@@ -23,10 +22,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const { id: databaseId } = req.query as { id: string }
   const text = req.body.text
 
   if (text) {
-    await addItem(text)
+    await addItem(text, databaseId)
   }
 
   res.status(200).json({ name: 'Jane Do' })
